@@ -2,12 +2,11 @@ const express = require('express')
 const morgan = require('morgan')
 
 const app = express()
+const cors = require('cors')
 
-
+app.use(cors())
 app.use(express.json()) 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :JSONpost')
-
-  )
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :JSONpost'))
 
 
 let persons = [
@@ -25,19 +24,27 @@ let persons = [
 
 
 app.get('/', (req, res) => {
+    morgan.token('JSONpost', function (req, res) { return '-' })
+
     res.send('<h1>Hello World!</h1>')
 })
 
 app.get('/api/persons', (req, res) => {
+    morgan.token('JSONpost', function (req, res) { return '-' })
+
     res.json(persons)
 })
 
 app.get('/info', (req, res) => {
+    morgan.token('JSONpost', function (req, res) { return '-' })
+
     const d = new Date()
     res.send('<p>Phonebook has info for ' + persons.length + ' people</p> <p>' + d + '</p>')
 })
 
 app.get('/api/persons/:id', (request, response) => {
+    morgan.token('JSONpost', function (req, res) { return '-' })
+
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
     if (person) {
@@ -48,6 +55,8 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
+    morgan.token('JSONpost', function (req, res) { return '-' })
+
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
@@ -87,7 +96,7 @@ app.post('/api/persons', (request, response) => {
 
 
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
