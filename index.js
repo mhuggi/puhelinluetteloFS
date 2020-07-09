@@ -10,6 +10,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
 
+
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.get('/', (req, res) => {
@@ -66,14 +67,14 @@ app.post('/api/persons', (request, response) => {
             error: 'content missing'
         })
     }
+    
     const person = new Person({
         name: body.name,
         number: body.number,
     })
-
-    person.save().then(savedPerson => {
+    person.save()
+    .then(savedPerson => {
         response.json(savedPerson)
-
     })
 
 })
