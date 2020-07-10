@@ -66,8 +66,7 @@ app.post('/api/persons', (request, response) => {
         return response.status(400).json({
             error: 'content missing'
         })
-    }
-    
+    }    
     const person = new Person({
         name: body.name,
         number: body.number,
@@ -76,7 +75,11 @@ app.post('/api/persons', (request, response) => {
     .then(savedPerson => {
         response.json(savedPerson)
     })
-
+    .catch(error => {
+        return response.status(400).json({
+            error: error.message
+        })
+    })
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
